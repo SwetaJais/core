@@ -1,0 +1,13 @@
+Resolving “Failed to Configure a DataSource” Error(Failed to configure a DataSource: 'url' attribute is not specified and no embedded 
+  datasource could be configured.)
+--Defining the data source(in application.properties file)
+---Disabling the auto-configuration of the data source(@SpringBootApplication(exclude={DataSourceAutoConfiguration.class}))
+
+
+If 404 found , and everything is correct then use @EnableAutoConfiguration
+if still doesn't work, then rename packaging of  controller/entity 
+with the name of main class package of SpringBoot(ex:-If main class is in com.sweta package
+then controller package will be com.sweta.controller etc)
+return Optional.of(studentRepository.getById(id))-- Using this for getting id showing error 500
+
+@Id , @Entity whenever use then import java.persistence package otherwise it will show error
