@@ -1,0 +1,134 @@
+table: (Master table)student(as user)(-first name
+	-last name
+	-mobile number
+	-email address
+	-projectid) can't be in student table
+
+       project(projid, projname, duration,studentid)
+ //@oneToMany Data pattern to insert(1-1)      
+{
+    "id":"1",
+    "firstname":"Neha",
+    "lastname":"Agarwal",
+     "mobilenumber":"123456789",
+     "emailaddress":"neha@gmail.com",
+     "projects":[
+         {
+           "projname":"Spring Boot",
+           "duration":"4"
+         }
+     ]
+
+}
+
+//@oneToMany Data pattern to insert(1-Many)
+{
+    "id":"2",
+    "firstname":"Raghav",
+    "lastname":"Roy",
+     "mobilenumber":"120456789",
+     "emailaddress":"roy@gmail.com",
+     "projects":[
+         {
+           "projname":"Spring MVC",
+           "duration":"5"
+         },
+        {
+           "projname":"Hibernate",
+           "duration":"3"
+         }
+     ]
+
+}
+
+@Onetomany
+studentform
+Create 3 APIs Insert, getAll,findByStudentId -- done
+ 7) Student user only allowed to do insert and admin can perform all operations
+(A student can work on more than one project. Student and Project are entities here)
+
+Work started
+---------------
+Created Springboot Application with specific dependency and provide dbconfig in application.properties files
+1)Create one user table with role column in it (Done) and then implement basic spring security in it ...
+then create student api and project 
+
+1. Normal Security  --- done 
+Password+Username
+------------------
+Sweta121(Ravi)
+1234(Ram)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2. Authentication & authorization  -- done
+3. oauth 
+4. oauth2 (Authorization b/w sservices) (Not able to do using google sign in)
+(url:- http://localhost:8080/student/oauth2)
+http://localhost:8080/login/oauth2/code/google
+ClientID:- 847145452435-el3eor1i0867hmvqn03r42bncd54t3r2.apps.googleusercontent.com
+ClientSecret:- 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
+
+Done using this approach
+-----------------------------
+OAUTH Server
+------------
+GOTO POSTMAN ->Select POST and paste this url (http://localhost:8080/oauth/token)
+then go to PARAMS section - > under KEY column define grant_type , username,password and 
+under VALUE column give values as password,John,john(username password values according to data inserted in db) 
+
+Now go to AUTHORIZATION SECTION -> SELECT TYPE Basic Auth - > give username, password(ex:- mobile,pin) as stored in oauth_client_details table - > Click on Send
+
+Access token will be generated, copy that
+
+Now select POST - >pass url(http://localhost:8080/oauth/check_token?token=PASTE HERE GENERATED_ACCESSTOKEN) - >Click on Send
+If no error then get userdetails who logged in  in JSON format
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Now it's time to access Resource server with generated token
+Select new tab (+) in POSTMAN and go to Authorization Section select type - >OAuth2.0
+then goto Header Section, under KEY column write Authorization and under Value column write Bearer+space+PASTE HERE GENERATED_ACCESSTOKEN
+and then pass the desired url with chosing correct http method(eg. POST/GET etc) and click on Send and if everthing is correct 
+then will get the desired output
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5. JWT(JSON token ) --- done
+(First we have to generate token then using that token we can access any api's)
+
+To Access JWT Based Application from Postman
+---------------------------------------------
+a) Select  POST and pass url (http://localhost:8080/student/authenticate) with this json data (as present in database)
+   {
+    "username": "Ram",
+    "password": "1234"
+   }
+
+b) Jwt token will be generated if successfully exceuted.
+
+
+c) Copy that token and then goto header section add Authorization under KEY column and
+paste (Bearer give one space generatedtoken) under value column and then access your api(ex:-http://localhost:8080/student/get) 
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*  String pwd = user.getPassword();
+	        String encryptpasswrd = passwordEncoder.encode(pwd);
+	        user.setPassword(encryptpasswrd); */
+
+String pwd = user.getPassword();
+		 PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	        String encryptpasswrd = encoder.encode(pwd);
+	        user.setPassword(encryptpasswrd);  //this generating bcrypt password and storing data but while login using same password not working
+
+
+
+
+
+
+/*	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+            )
+    private Set<Role> roles = new HashSet<>();*/
+ 
